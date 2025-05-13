@@ -1,19 +1,7 @@
-import logging
 from abc import ABC, abstractmethod
+from logger import get_logger
 
-logger = logging.getLogger("library_manager")
-logger.setLevel(logging.DEBUG)
-
-ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
-formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-ch.setFormatter(formatter)
-logger.addHandler(ch)
-
-fh = logging.FileHandler("library.log")
-fh.setLevel(logging.ERROR)
-fh.setFormatter(formatter)
-logger.addHandler(fh)
+logger = get_logger("library_manager", "library.log")
 
 
 class Book:
@@ -88,7 +76,8 @@ def main():
     manager = LibraryManager(library)
 
     while True:
-        command = input("Enter command (add, remove, show, exit): ").strip().lower()
+        command = input(
+            "Enter command (add, remove, show, exit): ").strip().lower()
 
         if command == "add":
             title = input("Enter book title: ").strip()

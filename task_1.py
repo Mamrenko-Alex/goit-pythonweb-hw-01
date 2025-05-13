@@ -1,19 +1,10 @@
-import logging
 from abc import ABC, abstractmethod
 
-logger = logging.getLogger("transport_info")
-logger.setLevel(logging.DEBUG)
+from logger import get_logger
 
-ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
-formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-ch.setFormatter(formatter)
-logger.addHandler(ch)
 
-fh = logging.FileHandler("transport.log")
-fh.setLevel(logging.ERROR)
-fh.setFormatter(formatter)
-logger.addHandler(fh)
+logger = get_logger("transport_info", "transport.log")
+
 
 class Vehicle(ABC):
     def __init__(self, make, model, region):
@@ -22,16 +13,20 @@ class Vehicle(ABC):
         self.region = region
 
     def start_engine(self):
-        logger.info(f"{self.make} {self.model} ({self.region} Spec): Мотор заведено")
+        logger.info(
+            f"{self.make} {self.model} ({self.region} Spec): Мотор заведено")
 
     def get_region(self):
         return f"Region of {self.make} {self.model} is {self.region}"
 
+
 class Car(Vehicle):
     pass
 
+
 class Motorcycle(Vehicle):
     pass
+
 
 class VehicleFactory(ABC):
     @abstractmethod
@@ -42,6 +37,7 @@ class VehicleFactory(ABC):
     def create_motorcycle(self, make, model):
         pass
 
+
 class USVehicleFactory(VehicleFactory):
     REGION = "USA"
 
@@ -51,6 +47,7 @@ class USVehicleFactory(VehicleFactory):
     def create_motorcycle(self, make, model):
         return Motorcycle(make, model, self.REGION)
 
+
 class EUVehicleFactory(VehicleFactory):
     REGION = "EURO"
 
@@ -59,6 +56,7 @@ class EUVehicleFactory(VehicleFactory):
 
     def create_motorcycle(self, make, model):
         return Motorcycle(make, model, self.REGION)
+
 
 usa_factory = USVehicleFactory()
 europe_factory = EUVehicleFactory()
